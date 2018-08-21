@@ -149,7 +149,7 @@ def ep_2_av(ep, times_=1000)->str:  # OK
         oid = doc.text()[2:]  # 这里要去掉前缀的两个字母
         if oid == '':
             """每0.5秒重试一次，频率过高可能会被封ip"""
-            print('正在重试...第{}次'.format(times), end='\r')
+            print('\r正在重试...第{}次'.format(times), end='')
             times += 1
             time.sleep(.5)
             continue
