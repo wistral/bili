@@ -1,8 +1,7 @@
 # coding=utf-8
 import reply
 import danmaku
-from lyric import get_lyric
-from time import sleep
+from lyric import lyric_fill
 
 
 if __name__ == '__main__':
@@ -31,7 +30,8 @@ if __name__ == '__main__':
     # hots = get_hots(aid)  # 获取热评
 
     """以下是弹幕的部分"""
-    # print(danmaku.get_cid('av29870567/?p=1'))
+    for _ in range(5):
+        print(danmaku.get_cid('ep'+str(232170+_)))
     # 在某个视频1p的第20秒发弹幕
     # dmid = danmaku.send(aid, message, video_time='05:39.020', mode=4, color=16646914)
     # 撤回弹幕,每天每个账号只有5次机会
@@ -55,15 +55,5 @@ if __name__ == '__main__':
     # first_floor(ep, message, run_time='14:43')
 
     """补充歌词的部分"""
-    def lyric_fill():
-        time, lyric = get_lyric(850775)
-        number = 1
-        for _ in range(len(time)):
-            if _ <= 40:
-                continue
-            if lyric[_] != '':
-                danmaku.send(aid, lyric[_], video_time=time[_], mode=4, color=16646914)
-                print('第{}条弹幕'.format(number), lyric[_])
-                number += 1
-                sleep(10)
+    # lyric_fill(aid, 850775)
     # print(lyric)

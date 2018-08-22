@@ -58,7 +58,7 @@ def get_cid_av(av)->str:
             return s
 
 
-def get_cid_ep(ep):  # TODO 有问题，不可用！ 49808781
+def get_cid_ep(ep):  # OK
     """ep:视频的ep号，包括前缀"""
     # return '49808781'
     url = 'https://www.bilibili.com/bangumi/play/'+ep
@@ -74,6 +74,13 @@ def get_cid_ep(ep):  # TODO 有问题，不可用！ 49808781
 
 
 def recall(av, dmid):
+    """
+    弹幕撤回的功能
+
+    :param av:
+    :param dmid:
+    :return:
+    """
     url = 'https://api.bilibili.com/x/dm/recall'
     cid = get_cid(av)
     if av[:2] == 'av':
@@ -253,7 +260,7 @@ def send(aid, msg, video_time=1, color=16777215, mode=1)->str:  # OK
         'Accept-Language': 'zh-CN,zh;q=0.9',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        'Content-Length': '300',  # todo:
+        'Content-Length': '300',  # todo:该参数的作用不明
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Cookie': cookies,
         'Host': 'api.bilibili.com',
@@ -282,7 +289,7 @@ def send(aid, msg, video_time=1, color=16777215, mode=1)->str:  # OK
             'msg': msg,
             'aid': aid,  # 视频av号
             'progress': video_time,  # 弹幕出现在视频的多少毫秒
-            'color': str(color),  # 弹幕颜色，默认为白色，对应16进制的0xffffff TODO:改变弹幕颜色未实现
+            'color': str(color),  # 弹幕颜色，默认为白色，对应16进制的0xffffff
             'fontsize': '25',  # 字体大小，大25，小18
             'pool': '0',
             # 弹幕类型
@@ -315,6 +322,14 @@ def send(aid, msg, video_time=1, color=16777215, mode=1)->str:  # OK
 
 
 def clear(aid, dmids, danmaku):
+    """
+    按照一定的规则批量举报违规弹幕的方法
+
+    :param aid: 视频号
+    :param dmids: 大量弹幕的id
+    :param danmaku: 大量弹幕的dmid
+    :return: None
+    """
     ban = 'VIP,强者,强使遇,強者,钞,会员'.split(',')
     ero = '五毛本,可本,有本,出本,事后,媚药,爱莉'.split(',')
     ad = ['资源']
