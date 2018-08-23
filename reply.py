@@ -20,6 +20,14 @@ opener = urllib.request.build_opener(_cp)
 urllib.request.install_opener(opener)
 
 
+def get_time():
+    local_time = time.localtime()
+    time_str = '{}'.format(local_time[0])
+    for i in range(5):
+        time_str += '-' + str(local_time[i + 1]).zfill(2)
+    return time_str
+
+
 def send_comment(aid, message, write=True) -> str:  # OK
     """
     通过模拟浏览器请求来完成对指定视频的评论发送,并在本地记录相关信息
@@ -59,10 +67,7 @@ def send_comment(aid, message, write=True) -> str:  # OK
     rpid = raw_data['data']['rpid']
     if write:
         # 记录时间
-        local_time = time.localtime()
-        time_str = '{}'.format(local_time[0])
-        for i in range(5):
-            time_str += '-' + str(local_time[i + 1]).zfill(2)
+        time_str = get_time()
         with open('bili-cmt-record.txt', 'ab') as f:
             # 向文件中写入相关信息，一些其他的操作(删除，回复评论)需要用到这些信息
             s = str(rpid)+'\tav'+aid+'\t【'+message+'】\t'+time_str+'\n'
@@ -157,7 +162,7 @@ def ep_2_av(ep, times_=1000)->str:  # OK
             return oid
 
 
-def auto_reply(ep, message, times=1000):  # OK
+def auto_reply(ep, message, times=400):  # OK
     """
     自动在指定的视频下发送评论
 
@@ -176,8 +181,7 @@ def auto_reply(ep, message, times=1000):  # OK
         print(ep, '的格式错误！')
         return
     rpid = send_comment(oid, message)
-    print('自动评论发送成功！')
-    print(rpid)
+    print('自动评论发送成功！', rpid)
     return rpid
 
 
@@ -290,7 +294,7 @@ def get_hots(aid, write=True)->[str]:  # OK
     return hots
 
 
-def first_floor(ep, message, run_time='22:23', max_times=4000):  # OK
+def first_floor(ep, message, run_time='22:23', max_times=400):  # OK
     """
     为了更加自动的实现在指定时间段的抢楼，使用轻量的schedule实现定时任务,用于实现自动在未来预测的某个视频下抢楼，
     抢楼是违规行为,这里仅用于学习，请勿用于非法！
@@ -298,7 +302,7 @@ def first_floor(ep, message, run_time='22:23', max_times=4000):  # OK
     :param ep: 视频的av号或者ep号
     :param message: 评论的内容
     :param run_time: 发送的时间，如果失败会重试
-    :param max_times: 最大尝试次数，默认为4000次"""
+    :param max_times: 最大尝试次数，默认为400次"""
     second = 0
     # 程序第一次运行到这里会添加一个定时任务，不会立刻运行
     # 这里默认设置为每天的22:59执行auto_reply函数
